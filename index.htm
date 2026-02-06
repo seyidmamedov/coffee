@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Balımm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #ffccd5, #cce7ff);
+      position: relative;
+    }
+    .box {
+      background: rgba(255,255,255,0.95);
+      padding: 30px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      width: 90%;
+      max-width: 350px;
+      position: relative;
+      height: 200px;
+      margin: auto;
+      top: 20%;
+    }
+    h1 {
+      margin-bottom: 50px;
+      font-size: 1.6rem;
+      color: #0077ff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    button {
+      padding: 14px 26px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      position: absolute;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    button:hover { transform: scale(1.05); }
+    #yes { left: 40px; bottom: 30px; background: #4caf50; color: white; }
+    #no { right: 40px; bottom: 30px; background: #f44336; color: white; }
+    #content { position: relative; z-index: 2; }
+  </style>
+</head>
+<body>
+
+  <div id="flowers"></div>
+
+  <div id="content" class="box">
+    <h1>Сосать хочешь ? 💙</h1>
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
+
+  <script>
+
+    function createFlower() {
+      const imgSrc = flowerImages[Math.floor(Math.random() * flowerImages.length)];
+      flower.src = imgSrc;
+      flower.className = 'flower';
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      const duration = Math.random() * 5 + 5;
+      flower.style.animationDuration = duration + 's';
+      document.getElementById('flowers').appendChild(flower);
+      setTimeout(() => flower.remove(), duration * 1000);
+    }
+
+    setInterval(createFlower, 500);
+
+    const noBtn = document.getElementById('no');
+    function moveNoButton() {
+      const padding = 10;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const bw = noBtn.offsetWidth;
+      const bh = noBtn.offsetHeight;
+      const boxRect = document.querySelector('.box').getBoundingClientRect();
+      const minX = boxRect.left + padding;
+      const maxX = vw - bw - padding;
+      const minY = boxRect.top + padding;
+      const maxY = vh - bh - padding;
+      let x = Math.random() * (maxX - minX) + minX;
+      let y = Math.random() * (maxY - minY) + minY;
+      const yesBtn = document.getElementById('yes');
+      const yesRect = yesBtn.getBoundingClientRect();
+      const distance = Math.hypot((x - yesRect.left), (y - yesRect.top));
+      if (distance < 80) { x = (x + 100) % maxX; y = (y + 50) % maxY; }
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+    noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); moveNoButton(); });
+    noBtn.addEventListener('mouseenter', moveNoButton);
+
+    document.getElementById('yes').addEventListener('click', () => {
+      document.getElementById('content').innerHTML = `
+        <h1 style="font-size:2rem; color:#0077ff; text-shadow:2px 2px 5px rgba(0,0,0,0.3);">Yanığ küçüyümmmmm 💙</h1>
+        <p style="font-size:1.2rem; color:#333; margin-top:10px;">Təki sən istə həyatımmm 🔥👅</p>
+        <div id="hearts"></div>
+      `;
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.innerHTML = '🔥 😍 🥰';
+        heart.style.position = 'fixed';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '0';
+        heart.style.fontSize = '28px';
+        heart.style.animation = 'fly 2s linear forwards';
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 3000);
+      }, 250);
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes fly {
+          from { transform: translateY(0); opacity: 1; }
+          to { transform: translateY(-100vh); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  </script>
+
+</body>
+</html>
